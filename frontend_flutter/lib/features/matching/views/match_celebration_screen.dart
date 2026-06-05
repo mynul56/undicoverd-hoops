@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:confetti/confetti.dart';
 
-class MatchCelebrationScreen extends StatelessWidget {
+class MatchCelebrationScreen extends StatefulWidget {
   final String matchId;
   final String targetPlayerId;
 
@@ -12,14 +13,36 @@ class MatchCelebrationScreen extends StatelessWidget {
   });
 
   @override
+  State<MatchCelebrationScreen> createState() => _MatchCelebrationScreenState();
+}
+
+class _MatchCelebrationScreenState extends State<MatchCelebrationScreen> {
+  late ConfettiController _confettiController;
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController(duration: const Duration(seconds: 3));
+    _confettiController.play();
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black.withValues(alpha: 0.9),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
+      body: Stack(
+        children: [
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
               "IT'S A MATCH!",
               style: TextStyle(
                 fontFamily: 'Inter',
@@ -80,6 +103,17 @@ class MatchCelebrationScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: ConfettiWidget(
+              confettiController: _confettiController,
+              blastDirectionality: BlastDirectionality.explosive,
+              shouldLoop: false,
+              colors: const [Colors.green, Colors.blue, Colors.pink, Colors.orange, Colors.purple],
+            ),
+          ),
+        ],
       ),
     );
   }

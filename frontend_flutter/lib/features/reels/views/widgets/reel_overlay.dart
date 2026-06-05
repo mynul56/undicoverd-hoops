@@ -57,10 +57,10 @@ class ReelOverlay extends StatelessWidget {
                   ],
                 ),
               ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildActionButton(
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _AnimatedActionButton(
                     icon: Icons.favorite_border,
                     label: 'Like',
                     onTap: () {
@@ -73,9 +73,9 @@ class ReelOverlay extends StatelessWidget {
                         const SnackBar(content: Text('Player Saved!')),
                       );
                     },
-                  ),
-                  const SizedBox(height: 20),
-                  _buildActionButton(
+                    ),
+                    const SizedBox(height: 20),
+                    _AnimatedActionButton(
                     icon: Icons.chat_bubble_outline,
                     label: 'Message',
                     onTap: () {
@@ -83,18 +83,18 @@ class ReelOverlay extends StatelessWidget {
                         const SnackBar(content: Text('Upgrade to Coach Pro to message players')),
                       );
                     },
-                  ),
-                  const SizedBox(height: 20),
-                  _buildActionButton(
+                    ),
+                    const SizedBox(height: 20),
+                    _AnimatedActionButton(
                     icon: Icons.videocam,
                     label: 'Call',
                     onTap: () {
                       context.read<CallBloc>().add(InitiateCall(reel.id));
                       context.push('/call');
                     },
-                  ),
-                  const SizedBox(height: 20),
-                  _buildActionButton(
+                    ),
+                    const SizedBox(height: 20),
+                    _AnimatedActionButton(
                     icon: Icons.share,
                     label: 'Share',
                     onTap: () {},
@@ -128,26 +128,70 @@ class ReelOverlay extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildActionButton({required IconData icon, required String label, required VoidCallback onTap}) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white.withValues(alpha: 0.1),
+class _AnimatedActionButton extends StatefulWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _AnimatedActionButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  State<_AnimatedActionButton> createState() => _AnimatedActionButtonState();
+}
+
+class _AnimatedActionButtonState extends State<_AnimatedActionButton> {
+  bool _isPressed = false;
+
+  void _handleTapDown(TapDownDetails details) {
+    setState(() => _isPressed = true);
+  }
+
+  void _handleTapUp(TapUpDetails details) {
+    setState(() => _isPressed = false);
+    widget.onTap();
+  }
+
+  void _handleTapCancel() {
+    setState(() => _isPressed = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: _handleTapDown,
+      onTapUp: _handleTapUp,
+      onTapCancel: _handleTapCancel,
+      child: AnimatedScale(
+        scale: _isPressed ? 0.8 : 1.0,
+        duration: const Duration(milliseconds: 100),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withValues(alpha: 0.15),
+              ),
+              child: Icon(widget.icon, color: Colors.white, size: 30),
             ),
-            child: Icon(icon, color: Colors.white, size: 30),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
-          ),
-        ],
+            const SizedBox(height: 4),
+            Text(
+              widget.label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                shadows: [Shadow(color: Colors.black, blurRadius: 4)],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

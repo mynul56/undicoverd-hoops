@@ -6,6 +6,7 @@ import 'shared/themes/theme.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 import 'features/auth/repositories/auth_repository.dart';
 import 'features/auth/views/login_screen.dart';
+import 'features/auth/views/register_screen.dart';
 import 'features/reels/bloc/reels_bloc.dart';
 import 'features/reels/views/reels_feed_screen.dart';
 import 'features/calls/bloc/call_bloc.dart';
@@ -14,6 +15,10 @@ import 'features/calls/services/signaling_service.dart';
 import 'features/calls/views/call_screen.dart';
 import 'features/matching/bloc/match_bloc.dart';
 import 'features/matching/views/match_celebration_screen.dart';
+import 'features/matching/views/discover_screen.dart';
+import 'features/chat/views/messages_screen.dart';
+import 'features/profile/views/profile_screen.dart';
+import 'shared/widgets/scaffold_with_nav_bar.dart';
 
 void main() {
   // Dependency Injection (Mock setup)
@@ -51,8 +56,8 @@ class MyApp extends StatelessWidget {
           builder: (context, state) => const LoginScreen(),
         ),
         GoRoute(
-          path: '/home',
-          builder: (context, state) => const ReelsFeedScreen(),
+          path: '/register',
+          builder: (context, state) => const RegisterScreen(),
         ),
         GoRoute(
           path: '/call',
@@ -67,6 +72,45 @@ class MyApp extends StatelessWidget {
               targetPlayerId: extra['targetPlayerId'] as String,
             );
           },
+        ),
+        StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) {
+            return ScaffoldWithNavBar(navigationShell: navigationShell);
+          },
+          branches: [
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/feed',
+                  builder: (context, state) => const ReelsFeedScreen(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/discover',
+                  builder: (context, state) => const DiscoverScreen(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/messages',
+                  builder: (context, state) => const MessagesScreen(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/profile',
+                  builder: (context, state) => const ProfileScreen(),
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );

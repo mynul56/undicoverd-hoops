@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import '../bloc/reels_bloc.dart';
 import '../bloc/reels_event.dart';
 import '../bloc/reels_state.dart';
@@ -42,7 +43,45 @@ class _ReelsFeedScreenState extends State<ReelsFeedScreen> {
         child: BlocBuilder<ReelsBloc, ReelsState>(
           builder: (context, state) {
             if (state is ReelsLoading || state is ReelsInitial) {
-              return const Center(child: CircularProgressIndicator(color: Colors.white));
+              return Shimmer.fromColors(
+                baseColor: Colors.grey.shade900,
+                highlightColor: Colors.grey.shade800,
+                child: Container(
+                  color: Colors.black,
+                  child: Stack(
+                    children: [
+                      // Simulated video layout
+                      Positioned(
+                        bottom: 20,
+                        left: 10,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(width: 150, height: 20, color: Colors.white),
+                            const SizedBox(height: 10),
+                            Container(width: 100, height: 16, color: Colors.white),
+                            const SizedBox(height: 10),
+                            Container(width: 200, height: 16, color: Colors.white),
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 20,
+                        right: 10,
+                        child: Column(
+                          children: [
+                            Container(width: 40, height: 40, decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle)),
+                            const SizedBox(height: 20),
+                            Container(width: 40, height: 40, decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle)),
+                            const SizedBox(height: 20),
+                            Container(width: 40, height: 40, decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle)),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
             } else if (state is ReelsError) {
               return Center(
                 child: Text(

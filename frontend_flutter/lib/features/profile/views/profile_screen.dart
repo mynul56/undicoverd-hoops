@@ -12,16 +12,25 @@ class ProfileScreen extends StatelessWidget {
             expandedHeight: 250,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: const Text('Jalen Green', style: TextStyle(fontWeight: FontWeight.bold)),
+              title: const Text('JALEN GREEN', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 2)),
+              centerTitle: true,
               background: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.black, Color(0xFF1A1D24)],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
+                decoration: BoxDecoration(
+                  image: const DecorationImage(
+                    image: NetworkImage('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop'),
+                    fit: BoxFit.cover,
+                  ),
+                  color: Colors.black, // fallback
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.black.withValues(alpha: 0.1), Colors.black],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
                   ),
                 ),
-                child: const Center(child: Icon(Icons.person, size: 80, color: Colors.white24)),
               ),
             ),
           ),
