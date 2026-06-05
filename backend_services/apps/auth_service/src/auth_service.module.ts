@@ -5,6 +5,7 @@ import { PrismaService } from './prisma.service';
 import { JwtModule } from '@nestjs/jwt';
 import { CallsModule } from './calls/calls.module';
 import { MatchesModule } from './matches/matches.module';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { MatchesModule } from './matches/matches.module';
     }),
     CallsModule,
     MatchesModule,
+    StripeModule,
   ],
   controllers: [AuthServiceController],
   providers: [AuthServiceService, PrismaService],

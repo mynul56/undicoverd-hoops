@@ -15,6 +15,7 @@ import 'features/calls/services/signaling_service.dart';
 import 'features/calls/views/call_screen.dart';
 import 'features/matching/bloc/match_bloc.dart';
 import 'features/matching/views/match_celebration_screen.dart';
+import 'features/subscription/views/subscription_screen.dart';
 import 'features/matching/views/discover_screen.dart';
 import 'features/search/views/search_screen.dart';
 import 'features/chat/views/messages_screen.dart';
@@ -68,12 +69,16 @@ class MyApp extends StatelessWidget {
         GoRoute(
           path: '/match_celebration',
           builder: (context, state) {
-            final extra = state.extra as Map<String, dynamic>;
+            final args = state.extra as Map<String, dynamic>? ?? {};
             return MatchCelebrationScreen(
-              matchId: extra['matchId'] as String,
-              targetPlayerId: extra['targetPlayerId'] as String,
+              matchId: args['matchId'] ?? 'mock_match_id',
+              targetPlayerId: args['targetPlayerId'] ?? 'mock_target_id',
             );
           },
+        ),
+        GoRoute(
+          path: '/subscription',
+          builder: (context, state) => const SubscriptionScreen(),
         ),
         GoRoute(
           path: '/chat',

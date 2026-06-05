@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -11,6 +12,12 @@ class ProfileScreen extends StatelessWidget {
           SliverAppBar(
             expandedHeight: 250,
             pinned: true,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.workspace_premium, color: Color(0xFFE4FF00)),
+                onPressed: () => context.push('/subscription'),
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: const Text('JALEN GREEN', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 2)),
               centerTitle: true,
