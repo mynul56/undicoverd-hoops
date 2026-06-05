@@ -1,0 +1,23 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend_services/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'backend_services/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Placeholder test
+        run: echo "Testing will be implemented per service"

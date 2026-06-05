@@ -1,0 +1,21 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  errors:
+    missing_required_param: error
+    missing_return: error
+    parameter_assignments: warning
+    unused_local_variable: warning
+
+linter:
+  rules:
+    - prefer_const_constructors
+    - prefer_const_declarations
+    - prefer_final_fields
+    - prefer_final_locals
+    - always_declare_return_types
+    - cancel_subscriptions
+    - close_sinks
+    - avoid_print
+    - always_use_package_imports
+    - unawaited_futures
