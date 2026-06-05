@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:network_image_mock/network_image_mock.dart';
 
 import 'package:undiscovered_hoops/main.dart';
 import 'package:undiscovered_hoops/features/auth/repositories/auth_repository.dart';
@@ -15,19 +16,21 @@ import 'package:undiscovered_hoops/features/calls/services/signaling_service.dar
 
 void main() {
   testWidgets('App renders correctly', (WidgetTester tester) async {
-    // Provide mocked dependencies for the test
-    final mockApiClient = ApiClient();
-    final mockAuthRepo = AuthRepositoryImpl(apiClient: mockApiClient);
-    final mockSignaling = SignalingService();
+    await mockNetworkImagesFor(() async {
+      // Provide mocked dependencies for the test
+      final mockApiClient = ApiClient();
+      final mockAuthRepo = AuthRepositoryImpl(apiClient: mockApiClient);
+      final mockSignaling = SignalingService();
 
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp(
-      authRepository: mockAuthRepo,
-      signalingService: mockSignaling,
-      apiClient: mockApiClient,
-    ));
+      // Build our app and trigger a frame.
+      await tester.pumpWidget(MyApp(
+        authRepository: mockAuthRepo,
+        signalingService: mockSignaling,
+        apiClient: mockApiClient,
+      ));
 
-    // Verify that the title text is rendered
-    expect(find.text('Production Architecture Scaffolding Complete'), findsOneWidget);
+      // Verify that the title text is rendered
+      expect(find.text('UNDISCOVERED'), findsOneWidget);
+    });
   });
 }
