@@ -24,7 +24,7 @@ const common_1 = __webpack_require__(3);
 const auth_service_controller_1 = __webpack_require__(4);
 const auth_service_service_1 = __webpack_require__(5);
 const prisma_service_1 = __webpack_require__(6);
-const jwt_1 = __webpack_require__(10);
+const jwt_1 = __webpack_require__(8);
 let AuthServiceModule = class AuthServiceModule {
 };
 exports.AuthServiceModule = AuthServiceModule;
@@ -70,7 +70,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthServiceController = void 0;
 const common_1 = __webpack_require__(3);
 const auth_service_service_1 = __webpack_require__(5);
-const standard_response_interceptor_1 = __webpack_require__(12);
+const standard_response_interceptor_1 = __webpack_require__(10);
 let AuthServiceController = class AuthServiceController {
     authService;
     constructor(authService) {
@@ -175,8 +175,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthServiceService = void 0;
 const common_1 = __webpack_require__(3);
 const prisma_service_1 = __webpack_require__(6);
-const jwt_1 = __webpack_require__(10);
-const bcrypt = __importStar(__webpack_require__(11));
+const jwt_1 = __webpack_require__(8);
+const bcrypt = __importStar(__webpack_require__(9));
 let AuthServiceService = class AuthServiceService {
     prisma;
     jwtService;
@@ -235,7 +235,7 @@ const common_1 = __webpack_require__(3);
 const client_1 = __webpack_require__(7);
 let PrismaService = class PrismaService extends client_1.PrismaClient {
     constructor() {
-        super({ adapter: null });
+        super();
     }
     async onModuleInit() {
         await this.$connect();
@@ -250,84 +250,24 @@ exports.PrismaService = PrismaService = __decorate([
 
 /***/ }),
 /* 7 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((module) => {
 
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Prisma = exports.PrismaClient = exports.$Enums = void 0;
-const path = __importStar(__webpack_require__(8));
-const node_url_1 = __webpack_require__(9);
-globalThis['__dirname'] = path.dirname((0, node_url_1.fileURLToPath)("file:///Users/betopia/mynul_projects/UNDISCOVERED%20HOOPS/backend_services/apps/auth_service/generated/prisma/client.ts"));
-const $Class = __importStar(__webpack_require__(Object(function webpackMissingModule() { var e = new Error("Cannot find module './internal/class.js'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())));
-const Prisma = __importStar(__webpack_require__(Object(function webpackMissingModule() { var e = new Error("Cannot find module './internal/prismaNamespace.js'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())));
-exports.Prisma = Prisma;
-exports.$Enums = __importStar(__webpack_require__(Object(function webpackMissingModule() { var e = new Error("Cannot find module './enums.js'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())));
-__exportStar(__webpack_require__(Object(function webpackMissingModule() { var e = new Error("Cannot find module './enums.js'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())), exports);
-exports.PrismaClient = $Class.getPrismaClientClass();
-
+module.exports = require("@prisma/client");
 
 /***/ }),
 /* 8 */
 /***/ ((module) => {
 
-module.exports = require("node:path");
+module.exports = require("@nestjs/jwt");
 
 /***/ }),
 /* 9 */
 /***/ ((module) => {
 
-module.exports = require("node:url");
-
-/***/ }),
-/* 10 */
-/***/ ((module) => {
-
-module.exports = require("@nestjs/jwt");
-
-/***/ }),
-/* 11 */
-/***/ ((module) => {
-
 module.exports = require("bcrypt");
 
 /***/ }),
-/* 12 */
+/* 10 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -340,7 +280,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.StandardResponseInterceptor = void 0;
 const common_1 = __webpack_require__(3);
-const operators_1 = __webpack_require__(13);
+const operators_1 = __webpack_require__(11);
 let StandardResponseInterceptor = class StandardResponseInterceptor {
     intercept(context, next) {
         return next.handle().pipe((0, operators_1.map)(data => ({
@@ -357,7 +297,7 @@ exports.StandardResponseInterceptor = StandardResponseInterceptor = __decorate([
 
 
 /***/ }),
-/* 13 */
+/* 11 */
 /***/ ((module) => {
 
 module.exports = require("rxjs/operators");
