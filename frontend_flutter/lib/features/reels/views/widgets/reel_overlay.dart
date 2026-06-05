@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import '../../../calls/bloc/call_bloc.dart';
+import '../../../calls/bloc/call_event.dart';
 import '../../models/reel_model.dart';
 
 class ReelOverlay extends StatelessWidget {
@@ -71,6 +75,15 @@ class ReelOverlay extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Upgrade to Coach Pro to message players')),
                       );
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  _buildActionButton(
+                    icon: Icons.videocam,
+                    label: 'Call',
+                    onTap: () {
+                      context.read<CallBloc>().add(InitiateCall(reel.id));
+                      context.push('/call');
                     },
                   ),
                   const SizedBox(height: 20),

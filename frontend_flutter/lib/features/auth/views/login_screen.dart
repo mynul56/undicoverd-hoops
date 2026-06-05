@@ -83,6 +83,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: const Text("Don't have an account? Register"),
                 ),
+                const Divider(height: 48),
+                const Text('Demo Access', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    OutlinedButton(
+                      onPressed: () {
+                        context.read<AuthBloc>().add(const LoginRequested(email: 'player@demo.com', password: 'demo'));
+                      },
+                      child: const Text('Demo Player'),
+                    ),
+                    OutlinedButton(
+                      onPressed: () {
+                        context.read<AuthBloc>().add(const LoginRequested(email: 'coach@demo.com', password: 'demo'));
+                      },
+                      child: const Text('Demo Coach'),
+                    ),
+                  ],
+                ),
               ],
             ),
           );

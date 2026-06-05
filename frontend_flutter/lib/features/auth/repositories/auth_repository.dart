@@ -25,6 +25,19 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, UserContract>> login(String email, String password) async {
+    // Demo bypass
+    if (email == 'player@demo.com' || email == 'coach@demo.com') {
+      final isCoach = email.contains('coach');
+      final fakeToken = 'demo_jwt_token_${isCoach ? "coach" : "player"}';
+      await _storage.write(key: 'jwt_token', value: fakeToken);
+      
+      return Right(UserContract(
+        id: isCoach ? 'demo_coach_1' : 'demo_player_1',
+        email: email,
+        role: isCoach ? 'coach' : 'player',
+      ));
+    }
+
     try {
       final response = await apiClient.dio.post(
         '/auth/login',

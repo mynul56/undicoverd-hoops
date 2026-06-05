@@ -9,16 +9,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:undiscovered_hoops/main.dart';
-import 'package:undiscovered_hoops/core/network/api_client.dart';
 import 'package:undiscovered_hoops/features/auth/repositories/auth_repository.dart';
+import 'package:undiscovered_hoops/core/network/api_client.dart';
+import 'package:undiscovered_hoops/features/calls/services/signaling_service.dart';
+
 void main() {
   testWidgets('App renders correctly', (WidgetTester tester) async {
     // Provide mocked dependencies for the test
-    final apiClient = ApiClient();
-    final authRepository = AuthRepositoryImpl(apiClient: apiClient);
+    final mockApiClient = ApiClient();
+    final mockAuthRepo = AuthRepositoryImpl(apiClient: mockApiClient);
+    final mockSignaling = SignalingService();
 
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp(authRepository: authRepository));
+    await tester.pumpWidget(MyApp(
+      authRepository: mockAuthRepo,
+      signalingService: mockSignaling,
+    ));
 
     // Verify that the title text is rendered
     expect(find.text('Production Architecture Scaffolding Complete'), findsOneWidget);

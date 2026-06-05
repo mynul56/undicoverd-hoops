@@ -7,19 +7,32 @@ import 'features/auth/repositories/auth_repository.dart';
 import 'features/auth/views/login_screen.dart';
 import 'features/reels/bloc/reels_bloc.dart';
 import 'features/reels/views/reels_feed_screen.dart';
+import 'features/calls/bloc/call_bloc.dart';
+import 'features/calls/bloc/call_event.dart';
+import 'features/calls/services/signaling_service.dart';
+import 'features/calls/views/call_screen.dart';
 
 void main() {
   // Dependency Injection (Mock setup)
   final apiClient = ApiClient();
   final authRepository = AuthRepositoryImpl(apiClient: apiClient);
+  final signalingService = SignalingService();
 
-  runApp(MyApp(authRepository: authRepository));
+  runApp(MyApp(
+    authRepository: authRepository,
+    signalingService: signalingService,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  final AuthRepository authRepository;
+  final AuthRepositoryImpl authRepository;
+  final SignalingService signalingService;
 
-  const MyApp({super.key, required this.authRepository});
+  const MyApp({
+    super.key,
+    required this.authRepository,
+    required this.signalingService,
+  });
 
   // This widget is the root of your application.
   @override
@@ -35,6 +48,10 @@ class MyApp extends StatelessWidget {
           path: '/home',
           builder: (context, state) => const ReelsFeedScreen(),
         ),
+        GoRoute(
+          path: '/call',
+          builder: (context, state) => const CallScreen(),
+        ),
       ],
     );
 
@@ -45,6 +62,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ReelsBloc>(
           create: (context) => ReelsBloc(),
+        ),
+        BlocProvider<CallBloc>(
+          create: (context) => CallBloc(signalingService)..add(const ConnectSignaling('demo_user')),
         ),
       ],
       child: MaterialApp.router(
