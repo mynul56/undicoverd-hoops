@@ -1,19 +1,39 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiClient {
-  final Dio _dio;
+  late final Dio dio;
+  final _storage = const FlutterSecureStorage();
 
-  ApiClient()
-      : _dio = Dio(BaseOptions(
-          baseUrl: 'http://localhost:3000/api', // TODO: Load from env
-          connectTimeout: const Duration(seconds: 10),
-          receiveTimeout: const Duration(seconds: 10),
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-        )) {
-    _dio.interceptors.add(LogInterceptor(
+  ApiClient() {
+    dio = Dio(BaseOptions(
+      baseUrl: 'http://localhost:3000', // Update for staging/prod
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    ));
+
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        final token = await _storage.read(key: 'jwt_token');
+        if (token != null) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
+        return handler.next(options);
+      },
+      onError: (DioException error, handler) async {
+        if (error.response?.statusCode == 401) {
+          // Handle token refresh or logout here
+          await _storage.delete(key: 'jwt_token');
+        }
+        return handler.next(error);
+      },
+    ));
+
+    dio.interceptors.add(LogInterceptor(
       request: true,
       requestHeader: true,
       requestBody: true,
@@ -22,24 +42,5 @@ class ApiClient {
       error: true,
     ));
     
-    // Auth Interceptor for adding tokens
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) async {
-        // TODO: Get token from secure storage and attach to header
-        // final token = await secureStorage.read(key: 'token');
-        // if (token != null) {
-        //   options.headers['Authorization'] = 'Bearer $token';
-        // }
-        return handler.next(options);
-      },
-      onError: (DioException e, handler) async {
-        if (e.response?.statusCode == 401) {
-          // TODO: Handle token refresh or logout
-        }
-        return handler.next(e);
-      },
-    ));
   }
-
-  Dio get dio => _dio;
 }

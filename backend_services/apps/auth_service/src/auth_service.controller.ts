@@ -9,15 +9,12 @@ export class AuthServiceController {
 
   @Post('login')
   login(@Body() body: any) {
-    return {
-      user: { id: '123', email: body.email, role: 'player' },
-      accessToken: 'jwt_token_example',
-    };
+    return this.authService.login(body);
   }
 
   @Post('register')
   register(@Body() body: any) {
-    return { id: '123', email: body.email };
+    return this.authService.register(body);
   }
 
   @Post('logout')

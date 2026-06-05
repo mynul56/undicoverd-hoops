@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'core/network/api_client.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 import 'features/auth/repositories/auth_repository.dart';
+import 'features/auth/views/login_screen.dart';
 
 void main() {
   // Dependency Injection (Mock setup)
@@ -20,22 +22,36 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final router = GoRouter(
+      initialLocation: '/login',
+      routes: [
+        GoRoute(
+          path: '/login',
+          builder: (context, state) => const LoginScreen(),
+        ),
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => Scaffold(
+            appBar: AppBar(title: const Text('Home')),
+            body: const Center(child: Text('Welcome to Undiscovered Hoops')),
+          ),
+        ),
+      ],
+    );
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(authRepository),
         ),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Undiscovered Hoops',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: Scaffold(
-          appBar: AppBar(title: const Text('Undiscovered Hoops')),
-          body: const Center(child: Text('Production Architecture Scaffolding Complete')),
-        ),
+        routerConfig: router,
       ),
     );
   }

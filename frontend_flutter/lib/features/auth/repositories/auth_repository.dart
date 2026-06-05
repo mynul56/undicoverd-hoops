@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/network/api_client.dart';
-// import '../models/user_model.dart'; // TODO: Implement UserModel
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../../../shared/models/user_contract.dart';
 
 // Mock User Model for compilation
 class User {
@@ -11,17 +12,19 @@ class User {
 }
 
 abstract class AuthRepository {
-  Future<Either<Failure, User>> login(String email, String password);
+  Future<Either<Failure, UserContract>> login(String email, String password);
+  Future<Either<Failure, UserContract>> register(String email, String password, String role);
   Future<Either<Failure, void>> logout();
 }
 
 class AuthRepositoryImpl implements AuthRepository {
   final ApiClient apiClient;
+  final _storage = const FlutterSecureStorage();
 
   AuthRepositoryImpl({required this.apiClient});
 
   @override
-  Future<Either<Failure, User>> login(String email, String password) async {
+  Future<Either<Failure, UserContract>> login(String email, String password) async {
     try {
       final response = await apiClient.dio.post(
         '/auth/login',
@@ -33,9 +36,36 @@ class AuthRepositoryImpl implements AuthRepository {
 
       if (response.data['success'] == true) {
         final userData = response.data['data']['user'];
-        return Right(User(id: userData['id'], email: userData['email']));
+        final token = response.data['data']['accessToken'];
+        if (token != null) await _storage.write(key: 'jwt_token', value: token);
+        return Right(UserContract.fromJson(userData));
       } else {
-        return Left(ServerFailure(response.data['error']['message'] ?? 'Login failed'));
+        return Left(ServerFailure(response.data['error']?.toString() ?? 'Login failed'));
+      }
+    } catch (e) {
+      return const Left(ServerFailure('Failed to connect to server'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserContract>> register(String email, String password, String role) async {
+    try {
+      final response = await apiClient.dio.post(
+        '/auth/register',
+        data: {
+          'email': email,
+          'password': password,
+          'role': role,
+        },
+      );
+
+      if (response.data['success'] == true) {
+        final userData = response.data['data']['user'];
+        final token = response.data['data']['accessToken'];
+        if (token != null) await _storage.write(key: 'jwt_token', value: token);
+        return Right(UserContract.fromJson(userData));
+      } else {
+        return Left(ServerFailure(response.data['error']?.toString() ?? 'Registration failed'));
       }
     } catch (e) {
       return const Left(ServerFailure('Failed to connect to server'));
@@ -45,6 +75,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> logout() async {
     try {
+      await _storage.delete(key: 'jwt_token');
       await apiClient.dio.post('/auth/logout');
       return const Right(null);
     } catch (e) {

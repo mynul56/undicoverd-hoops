@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../repositories/auth_repository.dart'; // Using the mock User for now
+import '../../../../shared/models/user_contract.dart';
 
 abstract class AuthState extends Equatable {
   const AuthState();
@@ -13,7 +13,7 @@ class AuthInitial extends AuthState {}
 class AuthLoading extends AuthState {}
 
 class AuthSuccess extends AuthState {
-  final User user;
+  final UserContract user;
 
   const AuthSuccess(this.user);
 
