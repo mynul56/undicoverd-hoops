@@ -5,6 +5,8 @@ import 'core/network/api_client.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 import 'features/auth/repositories/auth_repository.dart';
 import 'features/auth/views/login_screen.dart';
+import 'features/reels/bloc/reels_bloc.dart';
+import 'features/reels/views/reels_feed_screen.dart';
 
 void main() {
   // Dependency Injection (Mock setup)
@@ -31,10 +33,7 @@ class MyApp extends StatelessWidget {
         ),
         GoRoute(
           path: '/home',
-          builder: (context, state) => Scaffold(
-            appBar: AppBar(title: const Text('Home')),
-            body: const Center(child: Text('Welcome to Undiscovered Hoops')),
-          ),
+          builder: (context, state) => const ReelsFeedScreen(),
         ),
       ],
     );
@@ -43,6 +42,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(authRepository),
+        ),
+        BlocProvider<ReelsBloc>(
+          create: (context) => ReelsBloc(),
         ),
       ],
       child: MaterialApp.router(
