@@ -1,0 +1,53 @@
+name: CI Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js (Backend)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Backend Dependencies
+        run: |
+          cd backend_services
+          npm install
+
+      - name: Run Backend Tests
+        run: |
+          cd backend_services
+          npm run test --if-present
+
+      - name: Build Backend Microservices
+        run: |
+          cd backend_services
+          npm run build api_gateway
+          npm run build auth_service
+          npm run build messaging_service
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Flutter Dependencies
+        run: |
+          cd frontend_flutter
+          flutter pub get
+
+      - name: Run Flutter Tests & Linter
+        run: |
+          cd frontend_flutter
+          flutter analyze
+          flutter test
+
+      - name: Build Flutter App (APK)
+        run: |
+          cd frontend_flutter
+          flutter build apk --debug
