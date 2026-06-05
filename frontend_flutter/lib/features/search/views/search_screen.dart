@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../events/views/events_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -59,23 +60,40 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text('DATABASE', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 2)),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
         backgroundColor: Colors.black,
-        elevation: 0,
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          _buildTopSearchBar(),
-          _buildFilterMatrix(),
-          const Divider(color: Colors.white12, height: 1),
-          Expanded(
-            child: _buildResultsGrid(),
+        appBar: AppBar(
+          title: const Text('DISCOVERY', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 2)),
+          backgroundColor: Colors.black,
+          elevation: 0,
+          centerTitle: true,
+          bottom: const TabBar(
+            indicatorColor: Color(0xFFE4FF00),
+            labelColor: Color(0xFFE4FF00),
+            unselectedLabelColor: Colors.white54,
+            tabs: [
+              Tab(text: 'DATABASE'),
+              Tab(text: 'EVENTS'),
+            ],
           ),
-        ],
+        ),
+        body: TabBarView(
+          children: [
+            Column(
+              children: [
+                _buildTopSearchBar(),
+                _buildFilterMatrix(),
+                const Divider(color: Colors.white12, height: 1),
+                Expanded(
+                  child: _buildResultsGrid(),
+                ),
+              ],
+            ),
+            const EventsScreen(),
+          ],
+        ),
       ),
     );
   }

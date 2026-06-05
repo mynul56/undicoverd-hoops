@@ -14,6 +14,10 @@ class ProfileScreen extends StatelessWidget {
             pinned: true,
             actions: [
               IconButton(
+                icon: const Icon(Icons.settings, color: Colors.white),
+                onPressed: () => context.push('/edit_profile'),
+              ),
+              IconButton(
                 icon: const Icon(Icons.workspace_premium, color: Color(0xFFE4FF00)),
                 onPressed: () => context.push('/subscription'),
               ),
@@ -52,6 +56,22 @@ class ProfileScreen extends StatelessWidget {
                     _StatBlock(title: 'Position', value: 'SG'),
                     _StatBlock(title: 'Views', value: '14.2K'),
                   ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () => context.push('/analytics'),
+                    icon: const Icon(Icons.bar_chart_rounded, color: Colors.black),
+                    label: const Text('VIEW ANALYTICS', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1, color: Colors.black)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                  ),
                 ),
               ),
               const Divider(color: Colors.white24),

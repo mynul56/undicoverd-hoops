@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../pipeline/views/pipeline_screen.dart';
+import '../../stories/views/widgets/stories_ribbon.dart';
 
 class MessagesScreen extends StatelessWidget {
   const MessagesScreen({super.key});
@@ -42,10 +43,19 @@ class _InboxView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      padding: const EdgeInsets.all(16),
-      itemCount: 5,
-      separatorBuilder: (context, index) => const Divider(color: Colors.white12, height: 32),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
+          child: StoriesRibbon(),
+        ),
+        const Divider(color: Colors.white12, height: 1),
+        Expanded(
+          child: ListView.separated(
+            padding: const EdgeInsets.all(16),
+            itemCount: 5,
+            separatorBuilder: (context, index) => const Divider(color: Colors.white12, height: 32),
       itemBuilder: (context, index) {
         final isUnread = index == 0;
         final userName = 'Coach Mike';
@@ -129,6 +139,9 @@ class _InboxView extends StatelessWidget {
           ),
         );
       },
+    ),
+        ),
+      ],
     );
   }
 }

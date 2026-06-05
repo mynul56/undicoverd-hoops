@@ -16,6 +16,8 @@ import 'features/calls/views/call_screen.dart';
 import 'features/matching/bloc/match_bloc.dart';
 import 'features/matching/views/match_celebration_screen.dart';
 import 'features/subscription/views/subscription_screen.dart';
+import 'features/analytics/views/analytics_screen.dart';
+import 'features/profile/views/edit_profile_screen.dart';
 import 'features/matching/views/discover_screen.dart';
 import 'features/search/views/search_screen.dart';
 import 'features/chat/views/messages_screen.dart';
@@ -79,6 +81,14 @@ class MyApp extends StatelessWidget {
         GoRoute(
           path: '/subscription',
           builder: (context, state) => const SubscriptionScreen(),
+        ),
+        GoRoute(
+          path: '/analytics',
+          builder: (context, state) => const AnalyticsScreen(),
+        ),
+        GoRoute(
+          path: '/edit_profile',
+          builder: (context, state) => const EditProfileScreen(),
         ),
         GoRoute(
           path: '/chat',
