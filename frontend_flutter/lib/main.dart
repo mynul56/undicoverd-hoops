@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'core/network/api_client.dart';
+import 'shared/themes/theme.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 import 'features/auth/repositories/auth_repository.dart';
 import 'features/auth/views/login_screen.dart';
@@ -87,10 +88,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp.router(
         title: 'Undiscovered Hoops',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
+        theme: AppTheme.darkTheme,
+        debugShowCheckedModeBanner: false,
         routerConfig: router,
       ),
     );

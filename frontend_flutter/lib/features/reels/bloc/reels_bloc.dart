@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'reels_event.dart';
 import 'reels_state.dart';
 import '../models/reel_model.dart';
+import '../../../core/config/config.dart';
+import '../../../core/utils/demo_data.dart';
 
 class ReelsBloc extends Bloc<ReelsEvent, ReelsState> {
   ReelsBloc() : super(ReelsInitial()) {
@@ -11,41 +13,15 @@ class ReelsBloc extends Bloc<ReelsEvent, ReelsState> {
   Future<void> _onLoadReels(LoadReelsEvent event, Emitter<ReelsState> emit) async {
     emit(ReelsLoading());
     try {
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 1));
+      // Simulate network delay for skeleton loading
+      await Future.delayed(const Duration(milliseconds: 1500));
 
-      // Mock Data (Using public sample MP4s for now)
-      final mockReels = [
-        ReelModel(
-          id: '1',
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-          playerFirstName: 'Marcus',
-          playerLastName: 'Johnson',
-          height: '6\'4"',
-          position: 'Point Guard',
-          viewCount: 1400,
-        ),
-        ReelModel(
-          id: '2',
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-          playerFirstName: 'David',
-          playerLastName: 'Smith',
-          height: '6\'8"',
-          position: 'Power Forward',
-          viewCount: 890,
-        ),
-        ReelModel(
-          id: '3',
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-          playerFirstName: 'Chris',
-          playerLastName: 'Williams',
-          height: '6\'1"',
-          position: 'Shooting Guard',
-          viewCount: 3200,
-        ),
-      ];
-
-      emit(ReelsLoaded(mockReels));
+      if (AppConfig.isDemoMode) {
+        emit(ReelsLoaded(DemoData.demoReels));
+      } else {
+        // Fallback or API call
+        emit(ReelsLoaded(DemoData.demoReels));
+      }
     } catch (e) {
       emit(ReelsError(e.toString()));
     }

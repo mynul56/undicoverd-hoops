@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/network/api_client.dart';
 import 'match_event.dart';
 import 'match_state.dart';
+import '../../../core/config/config.dart';
+import '../../../core/utils/demo_data.dart';
 
 class MatchBloc extends Bloc<MatchEvent, MatchState> {
   final ApiClient _apiClient;
@@ -14,15 +16,26 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
   Future<void> _onLikePlayer(LikePlayer event, Emitter<MatchState> emit) async {
     emit(MatchLoading());
     try {
-      final response = await _apiClient.dio.post(
-        '/matches/like',
-        data: {
-          'coachId': event.coachId,
-          'playerId': event.playerId,
-        },
-      );
+      dynamic data;
+      if (AppConfig.isDemoMode) {
+        await Future.delayed(const Duration(milliseconds: 500));
+        // Hardcode demo match if it's player 1
+        if (event.playerId == 'demo_player_1') {
+          data = DemoData.demoMatchResponse;
+        } else {
+          data = DemoData.demoSaveResponse;
+        }
+      } else {
+        final response = await _apiClient.dio.post(
+          '/matches/like',
+          data: {
+            'coachId': event.coachId,
+            'playerId': event.playerId,
+          },
+        );
+        data = response.data;
+      }
 
-      final data = response.data;
       if (data['message'] == 'Mutual match achieved!') {
         emit(MutualMatchAchieved(
           matchId: data['match']['id'],
