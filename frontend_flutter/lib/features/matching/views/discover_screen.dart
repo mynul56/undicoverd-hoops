@@ -1,7 +1,87 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 
-class DiscoverScreen extends StatelessWidget {
+class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
+
+  @override
+  State<DiscoverScreen> createState() => _DiscoverScreenState();
+}
+
+class _DiscoverScreenState extends State<DiscoverScreen> {
+  final List<Map<String, String>> _profiles = [
+    {
+      'name': 'Jalen Green',
+      'position': 'Shooting Guard',
+      'height': '6\'5"',
+      'image': 'https://images.unsplash.com/photo-1518063319789-7217e6706b04?q=80&w=1200&auto=format&fit=crop'
+    },
+    {
+      'name': 'Scoot Henderson',
+      'position': 'Point Guard',
+      'height': '6\'2"',
+      'image': 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop'
+    },
+    {
+      'name': 'Chet Holmgren',
+      'position': 'Center',
+      'height': '7\'1"',
+      'image': 'https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=1200&auto=format&fit=crop'
+    },
+  ];
+
+  Offset _dragOffset = Offset.zero;
+  double _dragAngle = 0;
+  bool _isDragging = false;
+
+  void _onPanStart(DragStartDetails details) {
+    setState(() {
+      _isDragging = true;
+    });
+  }
+
+  void _onPanUpdate(DragUpdateDetails details) {
+    setState(() {
+      _dragOffset += details.delta;
+      _dragAngle = 45 * (_dragOffset.dx / MediaQuery.of(context).size.width);
+    });
+  }
+
+  void _onPanEnd(DragEndDetails details) {
+    setState(() {
+      _isDragging = false;
+    });
+
+    if (_dragOffset.dx > 150) {
+      _swipeCard(true); // Right swipe
+    } else if (_dragOffset.dx < -150) {
+      _swipeCard(false); // Left swipe
+    } else {
+      // Snap back
+      setState(() {
+        _dragOffset = Offset.zero;
+        _dragAngle = 0;
+      });
+    }
+  }
+
+  void _swipeCard(bool isRight) {
+    setState(() {
+      _dragAngle = isRight ? 45 : -45;
+      _dragOffset = Offset(isRight ? 1000 : -1000, 0);
+    });
+
+    Future.delayed(const Duration(milliseconds: 200), () {
+      if (!mounted) return;
+      setState(() {
+        if (_profiles.isNotEmpty) {
+          _profiles.removeAt(0);
+        }
+        _dragOffset = Offset.zero;
+        _dragAngle = 0;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,28 +100,50 @@ class DiscoverScreen extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Simulated stacked cards
-                  Positioned(
-                    top: 20,
-                    bottom: 40,
-                    left: 20,
-                    right: 20,
-                    child: _buildCard(context, scale: 0.9, opacity: 0.5, name: 'Chet Holmgren'),
-                  ),
-                  Positioned(
-                    top: 10,
-                    bottom: 20,
-                    left: 10,
-                    right: 10,
-                    child: _buildCard(context, scale: 0.95, opacity: 0.8, name: 'Scoot Henderson'),
-                  ),
-                  Positioned(
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: _buildCard(context, scale: 1.0, opacity: 1.0, name: 'Jalen Green', isFront: true),
-                  ),
+                  if (_profiles.isEmpty)
+                    const Center(
+                      child: Text('No more players to discover.', style: TextStyle(color: Colors.white54, fontSize: 18)),
+                    ),
+                  // Background cards
+                  ..._profiles.asMap().entries.toList().reversed.map((entry) {
+                    int index = entry.key;
+                    var profile = entry.value;
+
+                    if (index == 0) return const SizedBox.shrink(); // Front card rendered separately
+
+                    double scale = 1.0 - (index * 0.05);
+                    double topOffset = index * 10.0;
+                    double bottomOffset = index * 20.0;
+
+                    return Positioned(
+                      top: topOffset,
+                      bottom: bottomOffset,
+                      left: 10.0 * index,
+                      right: 10.0 * index,
+                      child: _buildCard(profile, scale: scale, opacity: 1.0 - (index * 0.2)),
+                    );
+                  }),
+
+                  // Front Card (Draggable)
+                  if (_profiles.isNotEmpty)
+                    Positioned(
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onPanStart: _onPanStart,
+                        onPanUpdate: _onPanUpdate,
+                        onPanEnd: _onPanEnd,
+                        child: AnimatedContainer(
+                          duration: _isDragging ? Duration.zero : const Duration(milliseconds: 200),
+                          transform: Matrix4.translationValues(_dragOffset.dx, _dragOffset.dy, 0)
+                            ..rotateZ(_dragAngle * (pi / 180)),
+                          transformAlignment: Alignment.center,
+                          child: _buildCard(_profiles.first, scale: 1.0, opacity: 1.0, isFront: true),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -49,9 +151,9 @@ class DiscoverScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildActionButton(Icons.close, Colors.redAccent, () {}),
+                _buildActionButton(Icons.close, Colors.redAccent, () => _swipeCard(false)),
                 _buildActionButton(Icons.star, Colors.blueAccent, () {}, size: 50),
-                _buildActionButton(Icons.favorite, const Color(0xFFE4FF00), () {}),
+                _buildActionButton(Icons.favorite, const Color(0xFFE4FF00), () => _swipeCard(true)),
               ],
             ),
             const SizedBox(height: 32),
@@ -61,7 +163,7 @@ class DiscoverScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCard(BuildContext context, {required double scale, required double opacity, required String name, bool isFront = false}) {
+  Widget _buildCard(Map<String, String> profile, {required double scale, required double opacity, bool isFront = false}) {
     return Transform.scale(
       scale: scale,
       child: Opacity(
@@ -70,8 +172,8 @@ class DiscoverScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.grey.shade900,
             borderRadius: BorderRadius.circular(24),
-            image: const DecorationImage(
-              image: NetworkImage('https://images.unsplash.com/photo-1518063319789-7217e6706b04?q=80&w=1200&auto=format&fit=crop'),
+            image: DecorationImage(
+              image: NetworkImage(profile['image']!),
               fit: BoxFit.cover,
             ),
             boxShadow: [
@@ -98,19 +200,19 @@ class DiscoverScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,
+                  profile['name']!,
                   style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.white),
                 ),
                 const SizedBox(height: 8),
-                const Row(
+                Row(
                   children: [
-                    Icon(Icons.sports_basketball, color: Color(0xFFE4FF00), size: 20),
-                    SizedBox(width: 8),
-                    Text('Shooting Guard', style: TextStyle(color: Colors.white, fontSize: 16)),
-                    SizedBox(width: 16),
-                    Icon(Icons.height, color: Color(0xFFE4FF00), size: 20),
-                    SizedBox(width: 8),
-                    Text('6\'5"', style: TextStyle(color: Colors.white, fontSize: 16)),
+                    const Icon(Icons.sports_basketball, color: Color(0xFFE4FF00), size: 20),
+                    const SizedBox(width: 8),
+                    Text(profile['position']!, style: const TextStyle(color: Colors.white, fontSize: 16)),
+                    const SizedBox(width: 16),
+                    const Icon(Icons.height, color: Color(0xFFE4FF00), size: 20),
+                    const SizedBox(width: 8),
+                    Text(profile['height']!, style: const TextStyle(color: Colors.white, fontSize: 16)),
                   ],
                 ),
                 const SizedBox(height: 16),

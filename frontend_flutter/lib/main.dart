@@ -17,6 +17,7 @@ import 'features/matching/bloc/match_bloc.dart';
 import 'features/matching/views/match_celebration_screen.dart';
 import 'features/matching/views/discover_screen.dart';
 import 'features/chat/views/messages_screen.dart';
+import 'features/chat/views/chat_screen.dart';
 import 'features/profile/views/profile_screen.dart';
 import 'shared/widgets/scaffold_with_nav_bar.dart';
 
@@ -70,6 +71,16 @@ class MyApp extends StatelessWidget {
             return MatchCelebrationScreen(
               matchId: extra['matchId'] as String,
               targetPlayerId: extra['targetPlayerId'] as String,
+            );
+          },
+        ),
+        GoRoute(
+          path: '/chat',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return ChatScreen(
+              userName: extra['userName'] as String,
+              userImage: extra['userImage'] as String,
             );
           },
         ),

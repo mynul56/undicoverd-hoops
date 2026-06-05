@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MessagesScreen extends StatelessWidget {
   const MessagesScreen({super.key});
@@ -18,14 +19,23 @@ class MessagesScreen extends StatelessWidget {
         separatorBuilder: (context, index) => const Divider(color: Colors.white12, height: 32),
         itemBuilder: (context, index) {
           final isUnread = index == 0;
+          final userName = 'Coach Mike';
+          final userImage = 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=200&auto=format&fit=crop';
+          
           return ListTile(
+            onTap: () {
+              context.push('/chat', extra: {
+                'userName': userName,
+                'userImage': userImage,
+              });
+            },
             contentPadding: EdgeInsets.zero,
             leading: Stack(
               children: [
                 CircleAvatar(
                   radius: 28,
                   backgroundColor: Colors.grey.shade800,
-                  backgroundImage: const NetworkImage('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=200&auto=format&fit=crop'),
+                  backgroundImage: NetworkImage(userImage),
                 ),
                 if (isUnread)
                   Positioned(

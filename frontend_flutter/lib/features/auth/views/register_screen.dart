@@ -46,10 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   'https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=3180&auto=format&fit=crop',
                 ),
                 fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withValues(alpha: 0.7),
-                  BlendMode.darken,
-                ),
+                colorFilter: ColorFilter.mode(Colors.black.withValues(alpha: 0.7), BlendMode.darken),
               ),
             ),
           ),
@@ -77,12 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       children: [
                         const Text(
                           'JOIN',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 2,
-                            color: Colors.white,
-                          ),
+                          style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white),
                         ),
                         const Text(
                           'THE LEAGUE',
@@ -94,11 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                         const SizedBox(height: 48),
-                        _buildInputField(
-                          controller: _emailController,
-                          label: 'Email',
-                          icon: Icons.email_outlined,
-                        ),
+                        _buildInputField(controller: _emailController, label: 'Email', icon: Icons.email_outlined),
                         const SizedBox(height: 16),
                         _buildInputField(
                           controller: _passwordController,
@@ -117,10 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             prefixIcon: const Icon(Icons.person_outline, color: Colors.white54),
                             filled: true,
                             fillColor: Colors.white.withValues(alpha: 0.1),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
-                            ),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                           ),
                           items: const [
                             DropdownMenuItem(value: 'player', child: Text('Player')),
@@ -140,19 +125,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               minimumSize: const Size(double.infinity, 56),
                               backgroundColor: const Color(0xFFE4FF00),
                               foregroundColor: Colors.black,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
-                            child: const Text('REGISTER', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                            child: const Text(
+                              'REGISTER',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1),
+                            ),
                           ),
                         const SizedBox(height: 16),
                         TextButton(
                           onPressed: () => context.pop(),
-                          child: const Text(
-                            "Already have an account? Log In",
-                            style: TextStyle(color: Colors.white70),
-                          ),
+                          child: const Text("Already have an account? Log In", style: TextStyle(color: Colors.white70)),
                         ),
                       ],
                     ),
@@ -182,10 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         prefixIcon: Icon(icon, color: Colors.white54),
         filled: true,
         fillColor: Colors.white.withValues(alpha: 0.1),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFFE4FF00), width: 1),

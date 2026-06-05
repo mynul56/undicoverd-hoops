@@ -4,7 +4,7 @@ class DemoData {
   static final List<ReelModel> demoReels = [
     ReelModel(
       id: 'demo_player_1',
-      videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+      videoUrl: 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4',
       playerFirstName: 'Jalen',
       playerLastName: 'Green',
       height: '6\'5"',
@@ -13,7 +13,7 @@ class DemoData {
     ),
     ReelModel(
       id: 'demo_player_2',
-      videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      videoUrl: 'https://test-videos.co.uk/vids/sintel/mp4/h264/720/Sintel_720_10s_1MB.mp4',
       playerFirstName: 'Chet',
       playerLastName: 'Holmgren',
       height: '7\'1"',
@@ -22,7 +22,7 @@ class DemoData {
     ),
     ReelModel(
       id: 'demo_player_3',
-      videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      videoUrl: 'https://test-videos.co.uk/vids/jellyfish/mp4/h264/720/Jellyfish_720_10s_1MB.mp4',
       playerFirstName: 'Scoot',
       playerLastName: 'Henderson',
       height: '6\'2"',
