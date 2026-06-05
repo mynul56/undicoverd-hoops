@@ -102,6 +102,7 @@ const auth_service_service_1 = __webpack_require__(/*! ./auth_service.service */
 const prisma_service_1 = __webpack_require__(/*! ./prisma.service */ "./apps/auth_service/src/prisma.service.ts");
 const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
 const calls_module_1 = __webpack_require__(/*! ./calls/calls.module */ "./apps/auth_service/src/calls/calls.module.ts");
+const matches_module_1 = __webpack_require__(/*! ./matches/matches.module */ "./apps/auth_service/src/matches/matches.module.ts");
 let AuthServiceModule = class AuthServiceModule {
 };
 exports.AuthServiceModule = AuthServiceModule;
@@ -113,6 +114,7 @@ exports.AuthServiceModule = AuthServiceModule = __decorate([
                 signOptions: { expiresIn: '1h' },
             }),
             calls_module_1.CallsModule,
+            matches_module_1.MatchesModule,
         ],
         controllers: [auth_service_controller_1.AuthServiceController],
         providers: [auth_service_service_1.AuthServiceService, prisma_service_1.PrismaService],
@@ -360,6 +362,200 @@ exports.CallsModule = CallsModule = __decorate([
         providers: [calls_gateway_1.CallsGateway],
     })
 ], CallsModule);
+
+
+/***/ },
+
+/***/ "./apps/auth_service/src/matches/matches.controller.ts"
+/*!*************************************************************!*\
+  !*** ./apps/auth_service/src/matches/matches.controller.ts ***!
+  \*************************************************************/
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.MatchesController = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const matches_service_1 = __webpack_require__(/*! ./matches.service */ "./apps/auth_service/src/matches/matches.service.ts");
+let MatchesController = class MatchesController {
+    matchesService;
+    constructor(matchesService) {
+        this.matchesService = matchesService;
+    }
+    async likePlayer(coachId, playerId) {
+        return this.matchesService.likePlayer(coachId, playerId);
+    }
+    async playerLikeCoach(playerId, coachId) {
+        return this.matchesService.playerLikeCoach(playerId, coachId);
+    }
+    async getMatches(userId, role) {
+        return this.matchesService.getMatches(userId, role);
+    }
+};
+exports.MatchesController = MatchesController;
+__decorate([
+    (0, common_1.Post)('like'),
+    __param(0, (0, common_1.Body)('coachId')),
+    __param(1, (0, common_1.Body)('playerId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], MatchesController.prototype, "likePlayer", null);
+__decorate([
+    (0, common_1.Post)('player-like'),
+    __param(0, (0, common_1.Body)('playerId')),
+    __param(1, (0, common_1.Body)('coachId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], MatchesController.prototype, "playerLikeCoach", null);
+__decorate([
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)('userId')),
+    __param(1, (0, common_1.Query)('role')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], MatchesController.prototype, "getMatches", null);
+exports.MatchesController = MatchesController = __decorate([
+    (0, common_1.Controller)('matches'),
+    __metadata("design:paramtypes", [typeof (_a = typeof matches_service_1.MatchesService !== "undefined" && matches_service_1.MatchesService) === "function" ? _a : Object])
+], MatchesController);
+
+
+/***/ },
+
+/***/ "./apps/auth_service/src/matches/matches.module.ts"
+/*!*********************************************************!*\
+  !*** ./apps/auth_service/src/matches/matches.module.ts ***!
+  \*********************************************************/
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.MatchesModule = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const matches_controller_1 = __webpack_require__(/*! ./matches.controller */ "./apps/auth_service/src/matches/matches.controller.ts");
+const matches_service_1 = __webpack_require__(/*! ./matches.service */ "./apps/auth_service/src/matches/matches.service.ts");
+const prisma_service_1 = __webpack_require__(/*! ../prisma.service */ "./apps/auth_service/src/prisma.service.ts");
+let MatchesModule = class MatchesModule {
+};
+exports.MatchesModule = MatchesModule;
+exports.MatchesModule = MatchesModule = __decorate([
+    (0, common_1.Module)({
+        controllers: [matches_controller_1.MatchesController],
+        providers: [matches_service_1.MatchesService, prisma_service_1.PrismaService],
+    })
+], MatchesModule);
+
+
+/***/ },
+
+/***/ "./apps/auth_service/src/matches/matches.service.ts"
+/*!**********************************************************!*\
+  !*** ./apps/auth_service/src/matches/matches.service.ts ***!
+  \**********************************************************/
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.MatchesService = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const prisma_service_1 = __webpack_require__(/*! ../prisma.service */ "./apps/auth_service/src/prisma.service.ts");
+const client_1 = __webpack_require__(/*! @prisma/client */ "@prisma/client");
+let MatchesService = class MatchesService {
+    prisma;
+    constructor(prisma) {
+        this.prisma = prisma;
+    }
+    async likePlayer(coachId, playerId) {
+        let match = await this.prisma.match.findUnique({
+            where: {
+                coachId_playerId: { coachId, playerId },
+            },
+        });
+        if (match) {
+            if (match.status === client_1.MatchStatus.ACCEPTED) {
+                return { message: 'Already matched!', match };
+            }
+            return { message: 'Already saved/liked!', match };
+        }
+        match = await this.prisma.match.create({
+            data: {
+                coachId,
+                playerId,
+                status: client_1.MatchStatus.PENDING,
+            },
+        });
+        return { message: 'Player saved!', match };
+    }
+    async playerLikeCoach(playerId, coachId) {
+        const match = await this.prisma.match.findUnique({
+            where: {
+                coachId_playerId: { coachId, playerId },
+            },
+        });
+        if (!match) {
+            throw new common_1.BadRequestException('Coach has not liked you yet.');
+        }
+        if (match.status === client_1.MatchStatus.PENDING) {
+            const updatedMatch = await this.prisma.match.update({
+                where: { id: match.id },
+                data: { status: client_1.MatchStatus.ACCEPTED },
+            });
+            return { message: 'Mutual match achieved!', match: updatedMatch };
+        }
+        return { message: 'Already matched!', match };
+    }
+    async getMatches(userId, role) {
+        if (role === 'coach') {
+            return this.prisma.match.findMany({
+                where: { coachId: userId },
+                include: { player: { include: { profile: true } } },
+            });
+        }
+        else {
+            return this.prisma.match.findMany({
+                where: { playerId: userId },
+                include: { coach: { include: { profile: true } } },
+            });
+        }
+    }
+};
+exports.MatchesService = MatchesService;
+exports.MatchesService = MatchesService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [typeof (_a = typeof prisma_service_1.PrismaService !== "undefined" && prisma_service_1.PrismaService) === "function" ? _a : Object])
+], MatchesService);
 
 
 /***/ },

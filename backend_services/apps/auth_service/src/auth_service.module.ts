@@ -4,6 +4,7 @@ import { AuthServiceService } from './auth_service.service';
 import { PrismaService } from './prisma.service';
 import { JwtModule } from '@nestjs/jwt';
 import { CallsModule } from './calls/calls.module';
+import { MatchesModule } from './matches/matches.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { CallsModule } from './calls/calls.module';
       signOptions: { expiresIn: '1h' },
     }),
     CallsModule,
+    MatchesModule,
   ],
   controllers: [AuthServiceController],
   providers: [AuthServiceService, PrismaService],

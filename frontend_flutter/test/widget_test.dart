@@ -24,6 +24,7 @@ void main() {
     await tester.pumpWidget(MyApp(
       authRepository: mockAuthRepo,
       signalingService: mockSignaling,
+      apiClient: mockApiClient,
     ));
 
     // Verify that the title text is rendered

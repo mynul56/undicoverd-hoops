@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../calls/bloc/call_bloc.dart';
 import '../../../calls/bloc/call_event.dart';
+import '../../../matching/bloc/match_bloc.dart';
+import '../../../matching/bloc/match_event.dart';
 import '../../models/reel_model.dart';
 
 class ReelOverlay extends StatelessWidget {
@@ -60,10 +62,15 @@ class ReelOverlay extends StatelessWidget {
                 children: [
                   _buildActionButton(
                     icon: Icons.favorite_border,
-                    label: '${reel.viewCount}',
+                    label: 'Like',
                     onTap: () {
+                      // Hardcoding demo values for the prototype
+                      context.read<MatchBloc>().add(LikePlayer(
+                        playerId: reel.id,
+                        coachId: 'demo_coach',
+                      ));
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Added to saved prospects!')),
+                        const SnackBar(content: Text('Player Saved!')),
                       );
                     },
                   ),

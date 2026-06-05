@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../bloc/reels_bloc.dart';
 import '../bloc/reels_event.dart';
 import '../bloc/reels_state.dart';
+import '../../matching/bloc/match_bloc.dart';
+import '../../matching/bloc/match_state.dart';
 import 'widgets/reel_video_player.dart';
 import 'widgets/reel_overlay.dart';
 
@@ -27,47 +30,57 @@ class _ReelsFeedScreenState extends State<ReelsFeedScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: BlocBuilder<ReelsBloc, ReelsState>(
-        builder: (context, state) {
-          if (state is ReelsLoading || state is ReelsInitial) {
-            return const Center(child: CircularProgressIndicator(color: Colors.white));
-          } else if (state is ReelsError) {
-            return Center(
-              child: Text(
-                'Failed to load reels: ${state.message}',
-                style: const TextStyle(color: Colors.white),
-              ),
-            );
-          } else if (state is ReelsLoaded) {
-            final reels = state.reels;
-            if (reels.isEmpty) {
-              return const Center(child: Text('No talent found.', style: TextStyle(color: Colors.white)));
-            }
-
-            return PageView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: reels.length,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-              itemBuilder: (context, index) {
-                final reel = reels[index];
-                return Stack(
-                  children: [
-                    ReelVideoPlayer(
-                      videoUrl: reel.videoUrl,
-                      isActive: index == _currentIndex,
-                    ),
-                    ReelOverlay(reel: reel),
-                  ],
-                );
-              },
-            );
+      body: BlocListener<MatchBloc, MatchState>(
+        listener: (context, matchState) {
+          if (matchState is MutualMatchAchieved) {
+            context.push('/match_celebration', extra: {
+              'matchId': matchState.matchId,
+              'targetPlayerId': matchState.targetPlayerId,
+            });
           }
-          return const SizedBox.shrink();
         },
+        child: BlocBuilder<ReelsBloc, ReelsState>(
+          builder: (context, state) {
+            if (state is ReelsLoading || state is ReelsInitial) {
+              return const Center(child: CircularProgressIndicator(color: Colors.white));
+            } else if (state is ReelsError) {
+              return Center(
+                child: Text(
+                  'Failed to load reels: ${state.message}',
+                  style: const TextStyle(color: Colors.white),
+                ),
+              );
+            } else if (state is ReelsLoaded) {
+              final reels = state.reels;
+              if (reels.isEmpty) {
+                return const Center(child: Text('No talent found.', style: TextStyle(color: Colors.white)));
+              }
+
+              return PageView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: reels.length,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  final reel = reels[index];
+                  return Stack(
+                    children: [
+                      ReelVideoPlayer(
+                        videoUrl: reel.videoUrl,
+                        isActive: index == _currentIndex,
+                      ),
+                      ReelOverlay(reel: reel),
+                    ],
+                  );
+                },
+              );
+            }
+            return const SizedBox.shrink();
+          },
+        ),
       ),
     );
   }

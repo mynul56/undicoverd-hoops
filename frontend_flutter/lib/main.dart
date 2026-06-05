@@ -11,6 +11,8 @@ import 'features/calls/bloc/call_bloc.dart';
 import 'features/calls/bloc/call_event.dart';
 import 'features/calls/services/signaling_service.dart';
 import 'features/calls/views/call_screen.dart';
+import 'features/matching/bloc/match_bloc.dart';
+import 'features/matching/views/match_celebration_screen.dart';
 
 void main() {
   // Dependency Injection (Mock setup)
@@ -21,17 +23,20 @@ void main() {
   runApp(MyApp(
     authRepository: authRepository,
     signalingService: signalingService,
+    apiClient: apiClient,
   ));
 }
 
 class MyApp extends StatelessWidget {
   final AuthRepositoryImpl authRepository;
   final SignalingService signalingService;
+  final ApiClient apiClient;
 
   const MyApp({
     super.key,
     required this.authRepository,
     required this.signalingService,
+    required this.apiClient,
   });
 
   // This widget is the root of your application.
@@ -52,6 +57,16 @@ class MyApp extends StatelessWidget {
           path: '/call',
           builder: (context, state) => const CallScreen(),
         ),
+        GoRoute(
+          path: '/match_celebration',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return MatchCelebrationScreen(
+              matchId: extra['matchId'] as String,
+              targetPlayerId: extra['targetPlayerId'] as String,
+            );
+          },
+        ),
       ],
     );
 
@@ -65,6 +80,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<CallBloc>(
           create: (context) => CallBloc(signalingService)..add(const ConnectSignaling('demo_user')),
+        ),
+        BlocProvider<MatchBloc>(
+          create: (context) => MatchBloc(apiClient),
         ),
       ],
       child: MaterialApp.router(
