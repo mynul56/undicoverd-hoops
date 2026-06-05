@@ -23,7 +23,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
       body: navigationShell,
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
           child: Container(
             height: 65,
             decoration: BoxDecoration(
@@ -42,9 +42,10 @@ class ScaffoldWithNavBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildNavItem(0, Icons.play_arrow_rounded, Icons.play_arrow_outlined, 'Feed', context),
-                _buildNavItem(1, Icons.explore_rounded, Icons.explore_outlined, 'Discover', context),
-                _buildNavItem(2, Icons.chat_bubble_rounded, Icons.chat_bubble_outline_rounded, 'Messages', context),
-                _buildNavItem(3, Icons.person_rounded, Icons.person_outline_rounded, 'Profile', context),
+                _buildNavItem(1, Icons.search_rounded, Icons.search_rounded, 'Search', context),
+                _buildNavItem(2, Icons.explore_rounded, Icons.explore_outlined, 'Discover', context),
+                _buildNavItem(3, Icons.chat_bubble_rounded, Icons.chat_bubble_outline_rounded, 'Messages', context),
+                _buildNavItem(4, Icons.person_rounded, Icons.person_outline_rounded, 'Profile', context),
               ],
             ),
           ),
@@ -63,7 +64,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOutQuint,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? Colors.white.withValues(alpha: 0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
@@ -83,7 +84,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
                 style: TextStyle(
                   color: color,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 12,
                 ),
               ),
             ]

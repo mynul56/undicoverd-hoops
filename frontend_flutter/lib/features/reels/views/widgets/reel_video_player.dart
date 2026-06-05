@@ -28,6 +28,7 @@ class _ReelVideoPlayerState extends State<ReelVideoPlayer> {
           _isInitialized = true;
         });
         _controller.setLooping(true);
+        _controller.setVolume(1.0); // Ensure sound is on
         if (widget.isActive) {
           _controller.play();
         }
@@ -65,15 +66,18 @@ class _ReelVideoPlayerState extends State<ReelVideoPlayer> {
 
     return GestureDetector(
       onTap: () {
-        if (_controller.value.isPlaying) {
-          _controller.pause();
-        } else {
-          _controller.play();
-        }
+        setState(() {
+          if (_controller.value.isPlaying) {
+            _controller.pause();
+          } else {
+            _controller.play();
+          }
+        });
       },
       child: Container(
         color: Colors.black,
         child: Stack(
+          alignment: Alignment.center,
           children: [
             SizedBox.expand(
               child: FittedBox(
@@ -99,6 +103,41 @@ class _ReelVideoPlayerState extends State<ReelVideoPlayer> {
                     stops: const [0.5, 1.0],
                   ),
                 ),
+              ),
+            ),
+            // Play/Pause visual feedback
+            if (!_controller.value.isPlaying)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.5),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.play_arrow_rounded,
+                  color: Colors.white,
+                  size: 64,
+                ),
+              ),
+            // Sound Toggle (Optional helper)
+            Positioned(
+              top: 40,
+              right: 16,
+              child: IconButton(
+                icon: Icon(
+                  _controller.value.volume > 0 ? Icons.volume_up : Icons.volume_off,
+                  color: Colors.white,
+                  size: 28,
+                ),
+                onPressed: () {
+                  setState(() {
+                    if (_controller.value.volume > 0) {
+                      _controller.setVolume(0.0);
+                    } else {
+                      _controller.setVolume(1.0);
+                    }
+                  });
+                },
               ),
             ),
           ],

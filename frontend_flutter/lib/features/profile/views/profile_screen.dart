@@ -48,9 +48,27 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
               const Divider(color: Colors.white24),
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text('Highlight Reels', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Highlight Reels', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Open Camera/Gallery...')),
+                        );
+                      },
+                      icon: const Icon(Icons.add, size: 18, color: Color(0xFFE4FF00)),
+                      label: const Text('New', style: TextStyle(color: Color(0xFFE4FF00))),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Color(0xFFE4FF00)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               // Fake grid of reels
               GridView.builder(
@@ -78,6 +96,20 @@ class ProfileScreen extends StatelessWidget {
             ]),
           ),
         ],
+      ), // <-- Added parenthesis and comma here to close CustomScrollView
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 80.0), // Raise above custom navigation bar
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Upload Reel flow triggered...')),
+            );
+          },
+          backgroundColor: const Color(0xFFE4FF00),
+          foregroundColor: Colors.black,
+          icon: const Icon(Icons.cloud_upload_rounded),
+          label: const Text('UPLOAD REEL', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
       ),
     );
   }

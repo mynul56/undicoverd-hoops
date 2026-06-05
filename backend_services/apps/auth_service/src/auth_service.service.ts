@@ -17,8 +17,9 @@ export class AuthServiceService {
     if (existingUser) throw new BadRequestException('User already exists');
 
     const passwordHash = await bcrypt.hash(password, 10);
+    const userRole = role?.toUpperCase() === 'COACH' ? 'COACH' : 'PLAYER';
     const user = await this.prisma.user.create({
-      data: { email, passwordHash, role: role || 'player' },
+      data: { email, passwordHash, role: userRole },
     });
 
     const token = this.jwtService.sign({ userId: user.id, role: user.role });

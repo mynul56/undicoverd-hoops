@@ -16,6 +16,7 @@ import 'features/calls/views/call_screen.dart';
 import 'features/matching/bloc/match_bloc.dart';
 import 'features/matching/views/match_celebration_screen.dart';
 import 'features/matching/views/discover_screen.dart';
+import 'features/search/views/search_screen.dart';
 import 'features/chat/views/messages_screen.dart';
 import 'features/chat/views/chat_screen.dart';
 import 'features/profile/views/profile_screen.dart';
@@ -94,6 +95,14 @@ class MyApp extends StatelessWidget {
                 GoRoute(
                   path: '/feed',
                   builder: (context, state) => const ReelsFeedScreen(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/search',
+                  builder: (context, state) => const SearchScreen(),
                 ),
               ],
             ),

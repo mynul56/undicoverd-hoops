@@ -15,7 +15,7 @@ class ReelOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 32, bottom: 120),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [

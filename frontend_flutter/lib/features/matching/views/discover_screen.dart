@@ -101,8 +101,48 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 alignment: Alignment.center,
                 children: [
                   if (_profiles.isEmpty)
-                    const Center(
-                      child: Text('No more players to discover.', style: TextStyle(color: Colors.white54, fontSize: 18)),
+                    Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.motion_photos_pause_outlined, size: 64, color: Colors.white24),
+                          const SizedBox(height: 16),
+                          const Text('No more prospects nearby.', style: TextStyle(color: Colors.white54, fontSize: 18)),
+                          const SizedBox(height: 24),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              setState(() {
+                                _profiles.addAll([
+                                  {
+                                    'name': 'Jalen Green',
+                                    'position': 'Shooting Guard',
+                                    'height': '6\'5"',
+                                    'image': 'https://images.unsplash.com/photo-1518063319789-7217e6706b04?q=80&w=1200&auto=format&fit=crop'
+                                  },
+                                  {
+                                    'name': 'Scoot Henderson',
+                                    'position': 'Point Guard',
+                                    'height': '6\'2"',
+                                    'image': 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop'
+                                  },
+                                  {
+                                    'name': 'Chet Holmgren',
+                                    'position': 'Center',
+                                    'height': '7\'1"',
+                                    'image': 'https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=1200&auto=format&fit=crop'
+                                  },
+                                ]);
+                              });
+                            },
+                            icon: const Icon(Icons.refresh, color: Colors.black),
+                            label: const Text('REFRESH', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFE4FF00),
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   // Background cards
                   ..._profiles.asMap().entries.toList().reversed.map((entry) {
@@ -156,7 +196,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 _buildActionButton(Icons.favorite, const Color(0xFFE4FF00), () => _swipeCard(true)),
               ],
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 120), // Increased padding for Nav Bar clearance
           ],
         ),
       ),
